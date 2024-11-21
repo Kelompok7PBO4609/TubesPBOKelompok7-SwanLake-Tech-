@@ -20,5 +20,4 @@ public class User{
     @Id
     protected UUID accountID;
     private String email;
-
 }
