@@ -1,29 +1,25 @@
 package com.tubes.swanlake_tech_backend.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.UUID;
-
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Account")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
+@Table(name = "account")
 public abstract class Account {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long accountID;
+    private String username;
+    private String password;
 
-    protected UUID accountID;
-    protected String username;
-    protected String password;
-
-    public abstract void login();
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

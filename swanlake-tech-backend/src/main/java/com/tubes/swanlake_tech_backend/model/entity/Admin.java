@@ -7,12 +7,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("USER")
-public class User extends Account{
-    private String email;
-
-    public User(String username, String password, String email) {
+@DiscriminatorValue("ADMIN")
+public class Admin extends Account{
+    public Admin(String username, String password) {
         super(username, password);
-        this.email = email;
     }
 }
