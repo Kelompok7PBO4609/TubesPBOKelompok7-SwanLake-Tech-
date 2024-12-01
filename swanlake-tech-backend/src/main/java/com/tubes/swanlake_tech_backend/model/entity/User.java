@@ -9,6 +9,7 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("USER")
 public class User extends Account{
+    @Column(nullable = false, unique = true)
     private String email;
 
     public User(String username, String password, String email) {
