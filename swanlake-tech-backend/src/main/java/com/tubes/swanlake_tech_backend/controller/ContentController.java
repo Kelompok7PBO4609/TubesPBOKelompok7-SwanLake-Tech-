@@ -10,13 +10,14 @@ public class ContentController {
 
     @GetMapping({"/login"})
     public String goToLogin() {
-        return "login/index";
+        return "login";
     }
 
-    @GetMapping("/login/register")
+    @GetMapping("/register")
     public String goToRegister(Model model) {
         UserDto userDto = new UserDto();
         model.addAttribute("userDto", userDto);
-        return "login/register";
+        model.addAttribute("success", false);
+        return "register";
     }
 }
