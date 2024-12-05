@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -15,19 +16,46 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/login/register")
+    @PostMapping("register")
     public String createUser(@Valid @ModelAttribute UserDto userDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "login/register";
+        User userEmail = userRepository.findByEmail(userDto.getEmail());
+        if (userEmail != null) {
+            result.addError(
+                    new FieldError("userDto", "email"
+                            , "Email address is already used")
+            );
         }
 
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        User userUsername = userRepository.findByUsername(userDto.getUsername());
+        if (userUsername != null) {
+            result.addError(
+                    new FieldError("userDto", "username"
+                            ,"Username is already used")
+            );
+        }
 
-        userRepository.save(user);
+        if (result.hasErrors()) {
+            return "register";
+        }
 
-        return "redirect:/login?success=true";
+        try {
+
+            User newUser = new User();
+            newUser.setUsername(userDto.getUsername());
+            newUser.setEmail(userDto.getEmail());
+            newUser.setPassword(userDto.getPassword());
+
+            userRepository.save(newUser);
+
+            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("success", true);
+        } catch(Exception ex) {
+            result.addError(
+                    new FieldError("userDto", "username"
+                            , ex.getMessage())
+            );
+        }
+
+        return "register";
     }
 }
