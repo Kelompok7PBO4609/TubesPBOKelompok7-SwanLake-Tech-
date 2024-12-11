@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Smartphone, Laptop, Gamepad, Headphones, TrendingUp, Star } from 'lucide-react';
 
 interface SideMenuProps {
@@ -7,6 +8,13 @@ interface SideMenuProps {
 }
 
 export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
+    const navigate = useNavigate();
+
+    const handleNavigate = (path: string) => {
+        navigate(path);
+        onClose(); // Tutup menu setelah navigasi
+    };
+
     return (
         <>
             {/* Overlay */}
@@ -38,18 +46,42 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                         <div>
                             <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">FEATURED</h3>
                             <div className="space-y-2">
-                                <MenuItem icon={<TrendingUp />} text="Trending Reviews" />
-                                <MenuItem icon={<Star />} text="Top Rated" />
+                                <MenuItem
+                                    icon={<TrendingUp />}
+                                    text="Trending Reviews"
+                                    onClick={() => handleNavigate('/trending-review')} // Contoh navigasi lain
+                                />
+                                <MenuItem
+                                    icon={<Star />}
+                                    text="Top Rated"
+                                    onClick={() => handleNavigate('/top-rated')} // Navigasi ke Top Rated
+                                />
                             </div>
                         </div>
 
                         <div>
                             <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">CATEGORIES</h3>
                             <div className="space-y-2">
-                                <MenuItem icon={<Smartphone />} text="Smartphones" />
-                                <MenuItem icon={<Laptop />} text="Laptops and Desktops" />
-                                <MenuItem icon={<Gamepad />} text="Consoles" />
-                                <MenuItem icon={<Headphones />} text="Accessories" />
+                                <MenuItem
+                                    icon={<Smartphone />}
+                                    text="Smartphones"
+                                    onClick={() => handleNavigate('/category/smartphones')}
+                                />
+                                <MenuItem
+                                    icon={<Laptop />}
+                                    text="Laptops and Desktops"
+                                    onClick={() => handleNavigate('/category/laptops')}
+                                />
+                                <MenuItem
+                                    icon={<Gamepad />}
+                                    text="Consoles"
+                                    onClick={() => handleNavigate('/category/consoles')}
+                                />
+                                <MenuItem
+                                    icon={<Headphones />}
+                                    text="Accessories"
+                                    onClick={() => handleNavigate('/category/accessories')}
+                                />
                             </div>
                         </div>
                     </div>
@@ -59,9 +91,20 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
     );
 }
 
-function MenuItem({ icon, text }: { icon: React.ReactNode; text: string }) {
+function MenuItem({
+                      icon,
+                      text,
+                      onClick,
+                  }: {
+    icon: React.ReactNode;
+    text: string;
+    onClick: () => void;
+}) {
     return (
-        <button className="flex items-center gap-3 w-full p-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+        <button
+            onClick={onClick}
+            className="flex items-center gap-3 w-full p-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+        >
             {icon}
             <span>{text}</span>
         </button>

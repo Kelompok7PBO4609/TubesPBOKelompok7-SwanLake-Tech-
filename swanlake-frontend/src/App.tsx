@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage';
 import CategoryPage from './pages/CategoryPage';
 import ReviewPage from './pages/ReviewPage';
 import { ThemeProvider } from './Theme/ThemeSwitcher';
+import TopRatedReviewsPage from "./pages/TopRatedPage";
+import TrendingReviewsPage from "./pages/TrendingReviews";
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/category/:category" element={<CategoryPage />} />
               <Route path="/review/:id" element={<ReviewPage />} />
+                <Route path="/top-rated/" element={<TopRatedReviewsPage />} />
+                <Route path="/trending-review/" element={<TrendingReviewsPage />} />
             </Routes>
           </div>
         </Router>
