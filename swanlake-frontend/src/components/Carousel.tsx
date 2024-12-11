@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import CategoryCard from './CategoryCard';
 
 const categories = [
@@ -7,25 +8,29 @@ const categories = [
         title: "Smartphones",
         image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1400",
         video: "/iphonead.mp4",
-        description: "In-depth reviews of the latest flagship phones from Apple, Samsung, Google and more"
+        description: "In-depth reviews of the latest flagship phones from Apple, Samsung, Google and more",
+        path: "/category/smartphones"
     },
     {
         title: "Laptops & Desktops",
         image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1400",
         video: "/laptopad.mp4",
-        description: "From ultrabooks to gaming powerhouses, find your next perfect laptop"
+        description: "From ultrabooks to gaming powerhouses, find your next perfect laptop",
+        path: "/category/laptops"
     },
     {
         title: "Consoles",
         image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&q=80&w=1400",
         video: "/consolead.mp4",
-        description: "Reviews of the latest next-gen consoles and peripherals"
+        description: "Reviews of the latest next-gen consoles and peripherals",
+        path: "/category/consoles"
     },
     {
         title: "Accessories",
         image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=1400",
         video: "/accad.mp4",
-        description: "Premium headphones, speakers, and any other accessories tested by experts"
+        description: "Premium headphones, speakers, and any other accessories tested by experts",
+        path: "/category/accessories"
     }
 ];
 
@@ -33,6 +38,7 @@ export default function Carousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoplay, setIsAutoplay] = useState(true);
     const [isHovering, setIsHovering] = useState(false);
+    const navigate = useNavigate();
 
     const next = () => {
         setCurrentIndex((currentIndex + 1) % categories.length);
@@ -49,6 +55,10 @@ export default function Carousel() {
         }
         return () => clearInterval(timer);
     }, [currentIndex, isAutoplay]);
+
+    const handleCategoryClick = (path: string) => {
+        navigate(path);
+    };
 
     return (
         <div
@@ -70,7 +80,8 @@ export default function Carousel() {
                     {categories.map((category, index) => (
                         <div
                             key={index}
-                            className="w-full flex-shrink-0"
+                            className="w-full flex-shrink-0 cursor-pointer"
+                            onClick={() => handleCategoryClick(category.path)}
                         >
                             <CategoryCard {...category} isHovering={isHovering} fullHeight />
                         </div>
@@ -79,7 +90,10 @@ export default function Carousel() {
             </div>
 
             <button
-                onClick={prev}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    prev();
+                }}
                 className="absolute left-8 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 p-3 rounded-full transition-all z-10 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
                 style={{ opacity: isHovering ? 1 : 0 }}
             >
@@ -87,7 +101,10 @@ export default function Carousel() {
             </button>
 
             <button
-                onClick={next}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    next();
+                }}
                 className="absolute right-8 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 p-3 rounded-full transition-all z-10 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
                 style={{ opacity: isHovering ? 1 : 0 }}
             >
@@ -98,7 +115,10 @@ export default function Carousel() {
                 {categories.map((_, index) => (
                     <button
                         key={index}
-                        onClick={() => setCurrentIndex(index)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIndex(index);
+                        }}
                         className={`w-2 h-2 rounded-full transition-all ${
                             index === currentIndex ? 'bg-white w-8' : 'bg-white/50'
                         }`}
