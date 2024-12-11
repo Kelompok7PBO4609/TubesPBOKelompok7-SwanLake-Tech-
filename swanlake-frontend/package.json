@@ -10,6 +10,7 @@
     "@types/node": "^16.18.119",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "axios": "^1.7.9",
     "gsap": "^3.12.5",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
@@ -17,6 +18,7 @@
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
     "react-stars": "^2.2.5",
+    "swanlake": "file:",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

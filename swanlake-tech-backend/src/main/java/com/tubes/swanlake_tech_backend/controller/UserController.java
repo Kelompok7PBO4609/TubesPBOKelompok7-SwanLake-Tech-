@@ -5,18 +5,26 @@ import com.tubes.swanlake_tech_backend.model.entity.User;
 import com.tubes.swanlake_tech_backend.model.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("register")
+    @GetMapping("/register")
+    public String goToRegister(Model model) {
+        UserDto userDto = new UserDto();
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("success", false);
+        return "register";
+    }
+
+    @PostMapping("/register")
     public String createUser(@Valid @ModelAttribute UserDto userDto, BindingResult result, Model model) {
         User userEmail = userRepository.findByEmail(userDto.getEmail());
         if (userEmail != null) {
