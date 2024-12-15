@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("register")
+/*    @PostMapping("register")
     public String createUser(@Valid @ModelAttribute UserDto userDto, BindingResult result, Model model) {
         User userEmail = userRepository.findByEmail(userDto.getEmail());
         if (userEmail != null) {
@@ -57,5 +57,5 @@ public class UserController {
         }
 
         return "register";
-    }
+    }*/
 }
