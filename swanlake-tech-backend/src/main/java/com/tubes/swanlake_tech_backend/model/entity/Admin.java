@@ -7,9 +7,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("ADMIN")
 public class Admin extends Account{
     public Admin(String username, String password) {
         super(username, password);
+        this.setRole("ADMIN");
     }
 }

@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("USER")
 public class User extends Account{
     @Column(nullable = false, unique = true)
     private String email;
@@ -15,5 +14,6 @@ public class User extends Account{
     public User(String username, String password, String email) {
         super(username, password);
         this.email = email;
+        this.setRole("USER");
     }
 }

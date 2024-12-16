@@ -9,12 +9,14 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "account")
 public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountID;
+
+    @Column(nullable = false)
+    private String role;
 
     @Column(nullable = false, unique = true)
     private String username;
