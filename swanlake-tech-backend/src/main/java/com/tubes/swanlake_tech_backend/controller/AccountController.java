@@ -15,7 +15,7 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
-    @GetMapping("/accounts")
+    @GetMapping("/get/account")
     List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }

@@ -17,7 +17,7 @@ export default function UserList() {
   }, []);
 
   const loadAccounts = async () => {
-    const result = await axios.get("http://localhost:8080/accounts");
+    const result = await axios.get("http://localhost:8080/account");
     setAccounts(result.data);
   };
 
