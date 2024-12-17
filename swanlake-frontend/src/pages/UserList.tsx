@@ -4,6 +4,7 @@ import { Eye, Edit, Trash } from "lucide-react";
 
 interface Account {
   accountID: string;
+  role: string;
   username: string;
   password: string;
   email: string;
@@ -17,7 +18,7 @@ export default function UserList() {
   }, []);
 
   const loadAccounts = async () => {
-    const result = await axios.get("http://localhost:8080/account");
+    const result = await axios.get("http://localhost:8080/get/account");
     setAccounts(result.data);
   };
 
@@ -43,13 +44,16 @@ export default function UserList() {
                 Account ID
               </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                Role
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
                 Username
               </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Password
+                Email
               </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Email
+                Password
               </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
                 Action
@@ -63,13 +67,16 @@ export default function UserList() {
                   {account.accountID}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-700">
+                  {account.role}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-700">
                   {account.username}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-700">
-                  {account.password}
+                  {account.email}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-700">
-                  {account.email}
+                  {account.password}
                 </td>
                 <td className="px-4 py-2 flex space-x-2">
                   <button
