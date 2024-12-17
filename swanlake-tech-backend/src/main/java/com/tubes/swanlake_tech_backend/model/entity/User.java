@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class User extends Account{
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String email;
 
     public User(String username, String password, String email) {
