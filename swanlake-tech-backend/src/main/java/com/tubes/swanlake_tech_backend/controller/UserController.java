@@ -26,7 +26,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error: Username cannot be empty!");
         }
         if (!USERNAME_PATTERN.matcher(newUser.getUsername()).matches()) {
-            return ResponseEntity.badRequest().body("Error: Username must be at least 3 characters long and alphanumeric!");
+            return ResponseEntity.badRequest().body("Error: Username must be at least 3 characters long, contain no spaces, and alphanumeric!");
         }
 
         // Validasi email
