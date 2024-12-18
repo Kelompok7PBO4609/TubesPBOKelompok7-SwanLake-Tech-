@@ -31,10 +31,10 @@ public class Review {
     private String processorDesc;
 
     @Column(nullable = false)
-    private String RAM;
+    private String ram;
 
     @Column(nullable = false)
-    private String RAMDesc;
+    private String ramDesc;
 
     @Column(nullable = false)
     private String storage;
@@ -65,6 +65,12 @@ public class Review {
 
     @Column(nullable = false)
     private String reviewText;
+
+    @Column(nullable = false)
+    private String imageName;
+
+    @Column(nullable = false)
+    private Double rating;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
