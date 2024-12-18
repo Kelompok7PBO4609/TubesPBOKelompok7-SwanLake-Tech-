@@ -1,127 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Star, Heart, Scale, MessageSquare, Share2, User } from 'lucide-react';
-import ReactStars from 'react-stars';
-import CommentSection from '../components/CommentSection';
-import ProductSpecs from '../components/ProductSpecs';
-import CompareModal from '../components/CompareModal';
-import AuthorCard from '../components/Author';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
+import ReviewCard from '../components/ReviewCard';
+import { Flame, ArrowLeft } from 'lucide-react';
 
-// Dummy data for trending reviews
-const trendingReviews = [
+interface ReviewData {
+    image: string;
+    title: string;
+    description: string;
+    date: string;
+    badge?: string;
+    slug: string;
+    rating: number;
+    views: number;
+    likes: number;
+}
+
+// Data dummy untuk review
+const reviewData: ReviewData[] = [
     {
-        title: "Samsung Galaxy S24 Ultra Review",
-        image: "https://images.unsplash.com/photo-1593642634443-44adaa06623a?auto=format&fit=crop&q=80&w=800",
-        slug: "samsung-galaxy-s24-ultra-review",
-        description: "Exploring the most powerful features of the Galaxy S24 Ultra.",
-        rating: 4.7,
-    },
-    {
-        title: "Apple Watch Ultra Review",
-        image: "https://images.unsplash.com/photo-1594785251292-5a1e9d6e7c19?auto=format&fit=crop&q=80&w=800",
-        slug: "apple-watch-ultra-review",
-        description: "The ultimate smartwatch experience with fitness tracking.",
+        image: "https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&q=80&w=800",
+        title: "iPhone 15 Pro Max Review",
+        slug: "iphone-15-pro-max-review",
+        description: "A comprehensive look at Apple's latest flagship phone.",
+        date: "2 days ago",
+        badge: "Editor's Choice",
         rating: 4.8,
+        views: 12000,
+        likes: 5000,
     },
     {
-        title: "MacBook Pro 16-inch Review",
-        image: "https://images.unsplash.com/photo-1612458033607-c750fd81d66f?auto=format&fit=crop&q=80&w=800",
-        slug: "macbook-pro-16-inch-review",
-        description: "The powerhouse laptop for professionals.",
+        image: "https://images.unsplash.com/photo-1593642634443-44adaa06623a?auto=format&fit=crop&q=80&w=800",
+        title: "Samsung S24 Ultra Review",
+        slug: "samsung-s24-ultra-review",
+        description: "Samsung's latest flagship with groundbreaking AI features.",
+        date: "1 week ago",
+        badge: "Must See",
+        rating: 4.5,
+        views: 8500,
+        likes: 4300,
+    },
+    {
+        image: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&q=80&w=800",
+        title: "PS5 Pro First Look",
+        slug: "ps5-pro-first-look",
+        description: "Sony's mid-generation upgrade brings 8K gaming.",
+        date: "1 week ago",
+        badge: "Hot",
+        rating: 4.7,
+        views: 15000,
+        likes: 8000,
+    },
+    {
+        image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=800",
+        title: "Sony WH-1000XM5",
+        slug: "sony-wh-1000xm5",
+        description: "The king of noise-cancelling headphones.",
+        date: "3 days ago",
+        badge: "Hot",
         rating: 4.9,
+        views: 9000,
+        likes: 5200,
     },
 ];
 
-export default function ReviewPage() {
-    const { slug } = useParams<{ slug: string }>(); // Mendapatkan slug dari URL
-    const [isWishlisted, setIsWishlisted] = useState(false);
-    const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
-    const [rating] = useState(4.5);
+export default function TrendingReviewsPage() {
+    const [trendingReviews, setTrendingReviews] = useState<ReviewData[]>([]);
+    const navigate = useNavigate();
 
-    // Use slug to find the specific review data (Example logic for slug)
     useEffect(() => {
-        console.log('Review for: ', slug);
-    }, [slug]);
+        // Logika untuk menentukan trending: kombinasi likes + views, diprioritaskan yang terbaru
+        const sorted = [...reviewData].sort((a, b) => {
+            const aScore = a.likes + a.views;
+            const bScore = b.likes + b.views;
+            return bScore - aScore;
+        });
+        setTrendingReviews(sorted);
+
+        // Animasi header
+        gsap.fromTo(
+            ".page-header",
+            { opacity: 0, y: -50 },
+            { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+        );
+    }, []);
 
     return (
-        <div className="min-h-screen dark:bg-black/60">
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Main Content */}
-                    <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                            <img
-                                src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1400"
-                                alt="iPhone 15 Pro Max"
-                                className="w-full h-96 object-cover"
-                            />
+        <div className="min-h-screen dark:bg-black">
+            {/* Tombol Back */}
+            <div className="fixed top-4 left-4 z-50">
+                <button
+                    onClick={() => navigate("/")}
+                    className="flex items-center gap-2 dark:text-white bg-white dark:bg-black px-4 py-2 rounded-lg shadow hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    <span>Back</span>
+                </button>
+            </div>
 
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h1 className="text-3xl font-bold dark:text-white">{slug ? slug.replace('-', ' ') : 'Loading...'}</h1>
-                                    <div className="flex items-center gap-4">
-                                        <button
-                                            onClick={() => setIsWishlisted(!isWishlisted)}
-                                            className={`p-2 rounded-full transition-colors ${isWishlisted ? 'bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-300' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}`}
-                                        >
-                                            <Heart className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} />
-                                        </button>
-                                        <button onClick={() => setIsCompareModalOpen(true)} className="p-2 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300 transition-colors">
-                                            <Scale className="w-6 h-6" />
-                                        </button>
-                                        <button className="p-2 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300 transition-colors">
-                                            <Share2 className="w-6 h-6" />
-                                        </button>
-                                    </div>
-                                </div>
+            {/* Header */}
+            <div className="page-header relative h-[40vh] flex items-center justify-center"
+                 style={{
+                     backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url("https://i.pinimg.com/736x/ee/e2/cd/eee2cd358c1d67fc27a3f9910f071f0f.jpg")`,
+                     backgroundSize: "cover",
+                     backgroundPosition: "center",
+                 }}
+            >
+                <div className="text-center text-white">
+                    <h1 className="text-5xl font-bold mb-4">Trending Reviews</h1>
+                    <p className="text-xl max-w-2xl mx-auto">
+                        Discover the reviews everyone is talking about.
+                    </p>
+                </div>
+            </div>
 
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="flex items-center gap-2">
-                                        <ReactStars count={5} value={rating} size={24} color2="#FDB241" edit={false} />
-                                        <span className="text-lg font-semibold dark:text-white">{rating}</span>
-                                    </div>
-                                    <div className="text-gray-500 dark:text-gray-400">|</div>
-                                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                        <MessageSquare className="w-5 h-5" />
-                                        <span>128 comments</span>
-                                    </div>
-                                </div>
-
-                                <div className="prose dark:prose-invert max-w-none">
-                                    <p className="text-gray-600 dark:text-gray-300 mb-6">
-                                        The iPhone 15 Pro Max represents Apple's most ambitious smartphone yet, featuring groundbreaking innovations in camera technology, performance, and design.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <CommentSection />
-                    </div>
-
-                    {/* Sidebar */}
-                    <div className="space-y-6">
-                        <AuthorCard />
-                        <ProductSpecs />
-
-                        {/* Trending Reviews Section */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                            <h3 className="text-xl font-bold dark:text-white mb-4">Trending Reviews</h3>
-                            <div className="space-y-4">
-                                {trendingReviews.map((review) => (
-                                    <div key={review.slug} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                        <div>
-                                            <h4 className="font-semibold dark:text-white">{review.title}</h4>
-                                            <p className="text-gray-500 dark:text-gray-400">{review.description}</p>
-                                        </div>
-                                        <span className="text-xl font-bold text-green-600 dark:text-green-400">{review.rating} <Star className="w-4 h-4 inline-block" /></span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+            {/* Konten */}
+            <div className="max-w-7xl mx-auto px-4 py-12">
+                <div className="flex justify-between items-center mb-8">
+                    <p className="text-gray-600 dark:text-white/80">
+                        Showing {trendingReviews.length} trending reviews
+                    </p>
                 </div>
 
-                <CompareModal isOpen={isCompareModalOpen} onClose={() => setIsCompareModalOpen(false)} />
+                {/* Review Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {trendingReviews.map((review, index) => (
+                        <ReviewCard
+                            key={review.slug}
+                            {...review}
+                            index={index} // Untuk animasi berbasis indeks
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
