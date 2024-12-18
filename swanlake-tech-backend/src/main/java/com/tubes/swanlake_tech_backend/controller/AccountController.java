@@ -16,7 +16,7 @@ public class AccountController {
     private AccountRepository accountRepository;
 
     @GetMapping("/get/account")
-    List<Account> getAllAccounts() {
+    List<Account> getAllAccount() {
         return accountRepository.findAll();
     }
 }
