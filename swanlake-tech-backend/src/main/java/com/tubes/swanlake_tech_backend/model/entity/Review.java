@@ -72,6 +72,12 @@ public class Review {
     @Column(nullable = false)
     private Double rating;
 
+    @Column(nullable = false)
+    private String keyFeatures;
+
+    @Column(nullable = false)
+    private String performance;
+
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 }
