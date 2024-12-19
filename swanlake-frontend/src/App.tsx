@@ -18,7 +18,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
-            <Route path="/review/:id" element={<ReviewPage />} />
+            <Route path="/review/:slug" element={<ReviewPage />} />
             <Route path="/top-rated/" element={<TopRatedReviewsPage />} />
             <Route path="/trending-review/" element={<TrendingReviewsPage />} />
             <Route path="/userlist/" element={<UserList />} />

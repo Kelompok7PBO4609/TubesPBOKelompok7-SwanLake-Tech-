@@ -17,7 +17,7 @@ interface Comment {
 const comments: Comment[] = [
     {
         id: 1,
-        user: "John Doe",
+        user: "Faris Dzulfiqar",
         avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100",
         rating: 4,
         content: "The camera improvements are incredible! Night mode photos are especially impressive.",
@@ -27,8 +27,8 @@ const comments: Comment[] = [
         replies: [
             {
                 id: 2,
-                user: "Jane Smith",
-                avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100",
+                user: "Nadhif Susanto",
+                avatar: "https://cdn.rafled.com/anime-icons/images/jQuSzIWU7vq4BHJL2Cs4pilRVMrHKZa3.jpg",
                 rating: 5,
                 content: "Totally agree! The macro shots are amazing too.",
                 likes: 8,

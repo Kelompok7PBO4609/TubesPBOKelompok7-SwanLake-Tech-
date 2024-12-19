@@ -1,5 +1,5 @@
     import React, { useEffect } from 'react';
-    import { useParams, useNavigate } from 'react-router-dom';
+    import {useParams, useNavigate, Link} from 'react-router-dom';
     import { gsap } from 'gsap';
     import ReviewCard from '../components/ReviewCard';
     import { Filter, SortDesc, ArrowLeft } from 'lucide-react';
@@ -13,7 +13,7 @@
                 {
                     image: "https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&q=80&w=800",
                     title: "iPhone 15 Pro Max Review",
-                    slug: "iPhone-15-Pro-Max -Review",
+                    slug: "iphone-15-pro-max-review",
                     description: "A comprehensive look at Apple's latest flagship phone.",
                     date: "2 days ago",
                     badge: "Editor's Choice"
@@ -154,7 +154,9 @@
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" >
                         {data.reviews.map((review, index) => (
                             <div key={index} className="review-card">
-                                <ReviewCard {...review} index={index} />
+                                <Link to={`/review/${review.slug}`} className="block">
+                                    <ReviewCard {...review} index={index} />
+                                </Link>
                             </div>
                         ))}
                     </div>

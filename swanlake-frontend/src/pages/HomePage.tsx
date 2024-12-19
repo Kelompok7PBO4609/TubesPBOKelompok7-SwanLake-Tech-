@@ -102,7 +102,7 @@ export default function HomePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {latestReviews.map((review, index) => (
                                 <div key={index} className="review-card">
-                                    <Link to={`/reviews/${review.slug}`} className="block">
+                                    <Link to={`/review/${review.slug}`} className="block">
                                         <ReviewCard {...review} index={index} />
                                     </Link>
                                 </div>
@@ -121,7 +121,7 @@ export default function HomePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {trendingReviews.map((review, index) => (
                                 <div key={index} className="review-card">
-                                    <Link to={`/reviews/${review.slug}`} className="block">
+                                    <Link to={`/review/${review.slug}`} className="block">
                                         <ReviewCard {...review} index={index} />
                                     </Link>
                                 </div>
