@@ -13,8 +13,9 @@ function ProfilePage() {
     try {
       const token = localStorage.getItem("token");
       const response = await UserService.getYourProfile(token);
-      if (response && response.Account) {
-        setProfileInfo(response.Account);
+      if (response && response.account) {
+        // Pastikan key kecil
+        setProfileInfo(response.account); // Ganti Account ke account
       } else {
         console.error("Profile data is missing:", response);
       }
