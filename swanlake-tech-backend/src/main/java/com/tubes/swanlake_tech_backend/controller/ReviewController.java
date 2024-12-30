@@ -2,7 +2,6 @@ package com.tubes.swanlake_tech_backend.controller;
 
 import com.tubes.swanlake_tech_backend.model.entity.Review;
 import com.tubes.swanlake_tech_backend.model.repository.ReviewRepository;
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

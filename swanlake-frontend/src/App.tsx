@@ -8,6 +8,7 @@ import { ThemeProvider } from "./Theme/ThemeSwitcher";
 import TopRatedReviewsPage from "./pages/TopRatedPage";
 import TrendingReviewsPage from "./pages/TrendingReviews";
 import UserList from "./pages/UserList";
+import ReviewList from "./pages/ReviewList";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/top-rated/" element={<TopRatedReviewsPage />} />
             <Route path="/trending-review/" element={<TrendingReviewsPage />} />
             <Route path="/userlist/" element={<UserList />} />
+            <Route path="/reviewlist/" element={<ReviewList />} />
           </Routes>
         </div>
       </Router>
