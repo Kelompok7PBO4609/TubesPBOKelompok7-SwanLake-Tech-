@@ -272,6 +272,22 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      {/* Footer */}
+      <footer className="bg-white dark:bg-black text-black py-12 dark:text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-bold mb-2">SwanLake Tech</h3>
+              <p className="text-gray-400">
+                Your trusted source for in-depth gadget reviews and tech news.
+              </p>
+            </div>
+            <div className="text-sm text-gray-400">
+              © {new Date().getFullYear()} Swanlake Tech. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
