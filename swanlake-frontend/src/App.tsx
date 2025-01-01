@@ -123,7 +123,7 @@ export default function App() {
               path="/product-review/:reviewID"
               element={
                 <ProtectedRoute roles={["USER", "ADMIN"]}>
-                  <ReviewWork />
+                  <ReviewPage />
                 </ProtectedRoute>
               }
             />

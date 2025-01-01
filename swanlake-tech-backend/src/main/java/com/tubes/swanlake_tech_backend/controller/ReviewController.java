@@ -3,6 +3,7 @@ package com.tubes.swanlake_tech_backend.controller;
 import com.tubes.swanlake_tech_backend.model.entity.Review;
 import com.tubes.swanlake_tech_backend.model.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,4 +42,13 @@ public class ReviewController {
     List<Review> getAllReview() {
         return reviewRepository.findAll();
     }
+
+    @GetMapping("/get/review/{id}")
+    public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+        return reviewRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+
 }
