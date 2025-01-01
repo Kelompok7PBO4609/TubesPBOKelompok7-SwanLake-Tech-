@@ -24,58 +24,61 @@ public class Review {
     @Column(nullable = false)
     private String reviewTitle;
 
-    @Column(nullable = false)
+    @Column
+    private String cardDesc;
+
+    @Column
     private String processor;
 
-    @Column(nullable = false)
+    @Column
     private String processorDesc;
 
-    @Column(nullable = false)
+    @Column
     private String ram;
 
-    @Column(nullable = false)
+    @Column
     private String ramDesc;
 
-    @Column(nullable = false)
+    @Column
     private String storage;
 
-    @Column(nullable = false)
+    @Column
     private String storageDesc;
 
-    @Column(nullable = false)
+    @Column
     private String display;
 
-    @Column(nullable = false)
+    @Column
     private String displayDesc;
 
-    @Column(nullable = false)
+    @Column
     private String battery;
 
-    @Column(nullable = false)
+    @Column
     private String batteryDesc;
 
-    @Column(nullable = false)
+    @Column
     private String camera;
 
-    @Column(nullable = false)
+    @Column
     private String cameraDesc;
 
-    @Column(nullable = false)
+    @Column
     private int price;
 
-    @Column(nullable = false)
+    @Column
     private String reviewText;
 
-    @Column(nullable = false)
+    @Column
     private String imageName;
 
-    @Column(nullable = false)
+    @Column
     private Double rating;
 
-    @Column(nullable = false)
+    @Column
     private String keyFeatures;
 
-    @Column(nullable = false)
+    @Column
     private String performance;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)

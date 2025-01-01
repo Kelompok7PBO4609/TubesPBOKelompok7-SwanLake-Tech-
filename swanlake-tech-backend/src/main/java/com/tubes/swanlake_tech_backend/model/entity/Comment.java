@@ -19,7 +19,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "accountID", nullable = false)
-    private User user;
+    private Account account;
 
     @ManyToOne
     @JoinColumn(name = "reviewID", nullable = false)
