@@ -21,9 +21,12 @@ import ForbiddenPage from "./pages/ForbiddenPage";
 import UserService from "./service/UserService"; // Import UserService
 import RegistrationPage from "./auth/RegistrationPage";
 import UserManagementPage from "./pages/UserManagementPage";
+import ReviewManagementPage from "./pages/ReviewManagementPage";
 import ReviewSmartphonePage from "./pages/ReviewSmartphonePage";
-import ReviewWork from "./pages/ReviewWork";
+import AdminRegister from "./pages/AdminRegister";
 import UpdateUserPage from "./pages/UpdateUserPage";
+import UpdateReviewPage from "./pages/UpdateReviewPage";
+import AddReview from "./pages/AddReview";
 
 export default function App() {
   // Mengecek apakah user sudah terautentikasi
@@ -80,7 +83,7 @@ export default function App() {
               }
             />
             <Route
-              path="/trending-review/"
+              path="/newest-review/"
               element={
                 <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <TrendingReviewsPage />
@@ -127,14 +130,6 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/update-user/:accountID"
-              element={
-                <ProtectedRoute roles={["USER", "ADMIN"]}>
-                  <UpdateUserPage />
-                </ProtectedRoute>
-              }
-            />
 
             {/* Halaman khusus admin */}
             <Route
@@ -146,12 +141,57 @@ export default function App() {
               }
             />
 
+            <Route
+              path="/update-user/:accountID"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <UpdateUserPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/update-review/:reviewID"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <UpdateReviewPage />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Halaman khusus admin */}
             <Route
               path="/user-management"
               element={
                 <ProtectedRoute roles={["ADMIN"]}>
                   <UserManagementPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin-register"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <AdminRegister />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/review-management"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <ReviewManagementPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/add-review"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <AddReview />
                 </ProtectedRoute>
               }
             />

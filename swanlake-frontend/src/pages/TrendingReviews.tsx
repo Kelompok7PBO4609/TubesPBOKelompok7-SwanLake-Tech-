@@ -137,7 +137,6 @@
 //     );
 // }
 
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
@@ -230,9 +229,9 @@ export default function TrendingReviewsPage() {
         }}
       >
         <div className="text-center text-white">
-          <h1 className="text-5xl font-bold mb-4">Trending Reviews</h1>
+          <h1 className="text-5xl font-bold mb-4">Newest Reviews</h1>
           <p className="text-xl max-w-2xl mx-auto">
-            Discover the reviews everyone is talking about.
+            Discover the latest review everyone is talking about.
           </p>
         </div>
       </div>
@@ -241,7 +240,7 @@ export default function TrendingReviewsPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
           <p className="text-gray-600 dark:text-white/80">
-            Showing {trendingReviews.length} trending reviews
+            Showing {trendingReviews.length} newest reviews
           </p>
         </div>
 

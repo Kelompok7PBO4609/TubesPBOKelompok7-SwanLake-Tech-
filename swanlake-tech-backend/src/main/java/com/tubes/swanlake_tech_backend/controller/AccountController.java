@@ -1,72 +1,85 @@
 package com.tubes.swanlake_tech_backend.controller;
 
+import com.tubes.swanlake_tech_backend.dto.ReqRes;
 import com.tubes.swanlake_tech_backend.model.entity.Account;
 import com.tubes.swanlake_tech_backend.model.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class AccountController {
-
     @Autowired
     private AccountRepository accountRepository;
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9]{3,}$");
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-
-    // BCryptPasswordEncoder untuk enkripsi password
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    @PostMapping("/post/user")
-    public ResponseEntity<?> newUser(@RequestBody Account newUser) {
-        // Validasi username
-        if (newUser.getName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Username cannot be empty!");
-        }
-        if (!USERNAME_PATTERN.matcher(newUser.getName()).matches()) {
-            return ResponseEntity.badRequest().body("Error: Username must be at least 3 characters long, contain no spaces, and alphanumeric!");
-        }
-
-        // Validasi email
-        if (newUser.getEmail().isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Email cannot be empty!");
-        }
-        if (!EMAIL_PATTERN.matcher(newUser.getEmail()).matches()) {
-            return ResponseEntity.badRequest().body("Error: Email format is invalid!");
-        }
-
-        // Validasi password
-        if (newUser.getPassword().isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Password cannot be empty!");
-        }
-
-        // Validasi username dan email unik
-        if (accountRepository.findByName(newUser.getName()).isPresent()) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
-        if (accountRepository.findByEmail(newUser.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Error: Email is already registered!");
-        }
-
-        // Enkripsi password menggunakan BCrypt
-        String encryptedPassword = passwordEncoder.encode(newUser.getPassword());
-        newUser.setPassword(encryptedPassword);
-
-        // Set default role
-        newUser.setRole("USER");
-
-        // Simpan user
-        Account savedUser = accountRepository.save(newUser);
-        return ResponseEntity.ok(savedUser);
+    // Get all accounts
+    @GetMapping("/get/account")
+    public ResponseEntity<ReqRes> getAllAccounts() {
+        List<Account> accountList = accountRepository.findAll();
+        ReqRes response = new ReqRes();
+        response.setStatusCode(HttpStatus.OK.value());
+        response.setMessage("Accounts retrieved successfully");
+        response.setAccountList(accountList);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/get/user")
-    public List<Account> getAllUser() {
-        return accountRepository.findAll();
+    // Get account by ID
+    @GetMapping("/get/account/{id}")
+    public ResponseEntity<ReqRes> getAccountById(@PathVariable Long id) {
+        return accountRepository.findById(id)
+                .map(account -> {
+                    ReqRes response = new ReqRes();
+                    response.setStatusCode(HttpStatus.OK.value());
+                    response.setMessage("Account retrieved successfully");
+                    response.setAccount(account);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> {
+                    ReqRes response = new ReqRes();
+                    response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                    response.setError("Account not found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                });
+    }
+
+    // Update account by ID
+    @PutMapping("/put/account/{id}")
+    public ResponseEntity<ReqRes> updateAccount(@PathVariable Long id, @RequestBody ReqRes request) {
+        return accountRepository.findById(id)
+                .map(existingAccount -> {
+                    // Update fields only if provided
+                    if (request.getName() != null && !request.getName().isBlank()) {
+                        existingAccount.setName(request.getName());
+                    }
+                    if (request.getEmail() != null && !request.getEmail().isBlank()) {
+                        existingAccount.setEmail(request.getEmail());
+                    }
+                    if (request.getRole() != null && !request.getRole().isBlank()) {
+                        existingAccount.setRole(request.getRole());
+                    }
+                    if (request.getPassword() != null && !request.getPassword().isBlank()) {
+                        existingAccount.setPassword(request.getPassword());
+                    }
+
+                    // Save the updated account
+                    Account savedAccount = accountRepository.save(existingAccount);
+
+                    // Prepare response
+                    ReqRes response = new ReqRes();
+                    response.setStatusCode(HttpStatus.OK.value());
+                    response.setMessage("Account updated successfully");
+                    response.setAccount(savedAccount);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> {
+                    ReqRes response = new ReqRes();
+                    response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                    response.setError("Account not found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                });
     }
 }

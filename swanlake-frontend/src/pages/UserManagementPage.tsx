@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserService from "../service/UserService";
 import { Profile } from "../service/UserService";
 import { Edit, Trash2 } from "lucide-react"; // Import icons from Lucide React
@@ -8,6 +8,7 @@ function UserManagementPage() {
   const [users, setUsers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Use navigate for redirection
 
   useEffect(() => {
     fetchUsers();
@@ -54,15 +55,23 @@ function UserManagementPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">
+      <h2 className="text-2xl font-bold text-center mb-6">
         Users Management Page
       </h2>
-      <div className="flex justify-end mb-4">
+
+      {/* Tombol Back dan Add User */}
+      <div className="flex justify-end gap-4 mb-6">
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition"
+        >
+          Back
+        </button>
         <Link
-          to="/register"
+          to="/admin-register"
           className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition"
         >
-          Add User
+          Add Admin
         </Link>
       </div>
 
@@ -111,18 +120,24 @@ function UserManagementPage() {
                     {account.role}
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-gray-700 flex items-center justify-center gap-4">
-                    <Link
-                      to={`/update-user/${account.accountID}`}
-                      className="text-blue-500 hover:text-blue-700 transition"
-                    >
-                      <Edit size={20} />
-                    </Link>
-                    <button
-                      onClick={() => deleteUser(account.accountID)}
-                      className="text-red-500 hover:text-red-700 transition"
-                    >
-                      <Trash2 size={20} />
-                    </button>
+                    {account.accountID !== "1" ? (
+                      <>
+                        <Link
+                          to={`/update-user/${account.accountID}`}
+                          className="text-blue-500 hover:text-blue-700 transition"
+                        >
+                          <Edit size={20} />
+                        </Link>
+                        <button
+                          onClick={() => deleteUser(account.accountID)}
+                          className="text-red-500 hover:text-red-700 transition"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </>
+                    ) : (
+                      <p className="text-gray-500">Not Allowed</p>
+                    )}
                   </td>
                 </tr>
               ))}
