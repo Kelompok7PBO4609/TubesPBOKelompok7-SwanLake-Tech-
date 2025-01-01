@@ -290,16 +290,26 @@ import ProductSpecs from '../components/ProductSpecs';
 import axios from 'axios';
 
 interface Review {
-  reviewID: string;
-  productName: string;
-  productType: string;
-  reviewTitle: string;
-  reviewText: string;
-  imageName: string;
-  price: number;
-  rating: number;
-  keyFeatures: string[];
-}
+    reviewID: string;
+    productName: string;
+    productType: string;
+    reviewTitle: string;
+    reviewText: string;
+    imageName: string;
+    price: number;
+    rating: number;
+    keyFeatures: string[];
+    processor: string; // Tambahkan properti ini
+    processorDesc: string; // Tambahkan deskripsi prosesor
+    storage: string; // Tambahkan properti ini
+    storageDesc: string; // Tambahkan deskripsi penyimpanan
+    display: string; // Tambahkan properti ini
+    displayDesc: string; // Tambahkan deskripsi layar
+    battery: string; // Tambahkan properti ini
+    batteryDesc: string; // Tambahkan deskripsi baterai
+  }
+  
+  
 
 export default function ReviewPage() {
   const { reviewID } = useParams<{ reviewID: string }>();
@@ -345,7 +355,7 @@ export default function ReviewPage() {
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <img
-              src={`/images/${review.imageName}`}
+              src={`${review.imageName}`}
               alt={review.productName}
               className="w-full h-96 object-cover"
             />
@@ -384,6 +394,7 @@ export default function ReviewPage() {
                   <span>128 comments</span>
                 </div>
               </div>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{review.reviewText}</p>
             </div>
           </div>
 
@@ -392,7 +403,21 @@ export default function ReviewPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <ProductSpecs reviewID={review.reviewID} />
+        <div className="space-y-6">
+  <ProductSpecs
+    specs={{
+      processor: review.processor,
+      processorDesc: review.processorDesc,
+      storage: review.storage,
+      storageDesc: review.storageDesc,
+      display: review.display,
+      displayDesc: review.displayDesc,
+      battery: review.battery,
+      batteryDesc: review.batteryDesc,
+    }}
+  />
+</div>
+
         </div>
       </div>
     </div>
