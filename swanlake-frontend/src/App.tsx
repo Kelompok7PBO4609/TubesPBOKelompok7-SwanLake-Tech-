@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import CategoryPage from "./pages/CategoryPage";
@@ -12,8 +17,14 @@ import ReviewList from "./pages/ReviewList";
 import LoginPage from "./auth/LoginPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import ForbiddenPage from "./pages/ForbiddenPage";
+import UserService from "./service/UserService"; // Import UserService
+import RegistrationPage from "./auth/RegistrationPage";
 
 export default function App() {
+  // Mengecek apakah user sudah terautentikasi
+  const isAuthenticated = UserService.isAuthenticated();
+
   return (
     <ThemeProvider>
       <Router>
@@ -21,14 +32,29 @@ export default function App() {
           <Navbar />
           <Routes>
             {/* Halaman tanpa autentikasi */}
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/register" element={<div>RegisterPage</div>} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? <Navigate to="/homepage" /> : <LoginPage />
+              }
+            />
+
+            <Route
+              path="/register"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/homepage" />
+                ) : (
+                  <RegistrationPage />
+                )
+              }
+            />
 
             {/* Halaman yang membutuhkan autentikasi */}
             <Route
               path="/category/:category"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <CategoryPage />
                 </ProtectedRoute>
               }
@@ -36,7 +62,7 @@ export default function App() {
             <Route
               path="/review/:slug"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <ReviewPage />
                 </ProtectedRoute>
               }
@@ -44,7 +70,7 @@ export default function App() {
             <Route
               path="/top-rated/"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <TopRatedReviewsPage />
                 </ProtectedRoute>
               }
@@ -52,7 +78,7 @@ export default function App() {
             <Route
               path="/trending-review/"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <TrendingReviewsPage />
                 </ProtectedRoute>
               }
@@ -60,7 +86,7 @@ export default function App() {
             <Route
               path="/userlist/"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <UserList />
                 </ProtectedRoute>
               }
@@ -68,7 +94,7 @@ export default function App() {
             <Route
               path="/reviewlist/"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <ReviewList />
                 </ProtectedRoute>
               }
@@ -76,20 +102,24 @@ export default function App() {
             <Route
               path="/homepage/"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
                   <HomePage />
                 </ProtectedRoute>
               }
             />
 
+            {/* Halaman khusus admin */}
             <Route
               path="/admin-dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={["ADMIN"]}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
             />
+
+            {/* Halaman 403 - Forbidden */}
+            <Route path="/403" element={<ForbiddenPage />} />
           </Routes>
         </div>
       </Router>

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 interface UserData {
-  name: string;
+  username: string;
   email: string;
   password: string;
   [key: string]: any; // untuk fleksibilitas tambahan
@@ -9,7 +9,7 @@ interface UserData {
 
 interface Profile {
   id: string;
-  name: string;
+  username: string;
   email: string;
   role: string;
   [key: string]: any;
@@ -35,20 +35,18 @@ class UserService {
     }
   }
 
-  static async register(
-    userData: UserData,
-    token: string
-  ): Promise<{ message: string }> {
+  static async register(userData: UserData): Promise<{ message: string }> {
     try {
       const response: AxiosResponse<{ message: string }> = await axios.post(
         `${UserService.BASE_URL}/auth/register`,
-        userData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        userData
       );
       return response.data;
-    } catch (err) {
+    } catch (err: any) {
+      // Pass backend error message to frontend
+      if (err.response?.data?.message) {
+        throw new Error(err.response.data.message);
+      }
       throw err;
     }
   }

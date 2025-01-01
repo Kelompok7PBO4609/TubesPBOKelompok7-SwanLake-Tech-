@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class AccountManagementService {
@@ -27,28 +28,83 @@ public class AccountManagementService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ReqRes register(ReqRes registrationRequest){
+    public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
 
         try {
+            // Validate username
+            if (registrationRequest.getUsername() == null || registrationRequest.getUsername().isEmpty()) {
+                resp.setStatusCode(400);
+                resp.setMessage("Username cannot be empty");
+                return resp;
+            }
+            if (!Pattern.matches("^[a-zA-Z0-9]{3,}$", registrationRequest.getUsername())) {
+                resp.setStatusCode(400);
+                resp.setMessage("Username must be at least 3 characters and only alphanumeric");
+                return resp;
+            }
+
+            // Validate email
+            if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
+                resp.setStatusCode(400);
+                resp.setMessage("Email cannot be empty");
+                return resp;
+            }
+            if (!Pattern.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", registrationRequest.getEmail())) {
+                resp.setStatusCode(400);
+                resp.setMessage("Invalid email format");
+                return resp;
+            }
+
+            // Validate password
+            if (registrationRequest.getPassword() == null || registrationRequest.getPassword().isEmpty()) {
+                resp.setStatusCode(400);
+                resp.setMessage("Password cannot be empty");
+                return resp;
+            }
+            if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{6,}$",
+                    registrationRequest.getPassword())) {
+                resp.setStatusCode(400);
+                resp.setMessage("Password must be at least 6 characters long, containing at least one uppercase letter, " +
+                        "one lowercase letter, one digit, and one special character");
+                return resp;
+            }
+
+            // Check if email already exists
+            if (accountRepository.findByEmail(registrationRequest.getEmail()).isPresent()) {
+                resp.setStatusCode(400);
+                resp.setMessage("Email already in use");
+                return resp;
+            }
+
+            // Check if username already exists
+            if (accountRepository.findByUsername(registrationRequest.getUsername()).isPresent()) {
+                resp.setStatusCode(400);
+                resp.setMessage("Username already in use");
+                return resp;
+            }
+
+            // Save the user
             Account account = new Account();
             account.setEmail(registrationRequest.getEmail());
             account.setRole(registrationRequest.getRole());
             account.setUsername(registrationRequest.getUsername());
             account.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+
             Account ourUsersResult = accountRepository.save(account);
-            if (ourUsersResult.getAccountID()>0) {
-                resp.setAccount((ourUsersResult));
+            if (ourUsersResult.getAccountID() > 0) {
+                resp.setAccount(ourUsersResult);
                 resp.setMessage("User Saved Successfully");
                 resp.setStatusCode(200);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
         }
         return resp;
     }
+
 
     public ReqRes login(ReqRes loginRequest){
         ReqRes response = new ReqRes();

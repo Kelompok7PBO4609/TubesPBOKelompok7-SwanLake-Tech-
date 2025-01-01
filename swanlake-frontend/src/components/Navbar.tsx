@@ -20,6 +20,7 @@ export default function Navbar() {
     if (confirmLogout) {
       UserService.logout();
       navigate("/"); // Redirect to login page
+      window.location.reload();
     }
   };
 
