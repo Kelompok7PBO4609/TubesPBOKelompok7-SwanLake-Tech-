@@ -2,6 +2,8 @@ package com.tubes.swanlake_tech_backend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -80,6 +82,9 @@ public class Review {
 
     @Column
     private String performance;
+
+    @Column
+    private LocalDate date;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;

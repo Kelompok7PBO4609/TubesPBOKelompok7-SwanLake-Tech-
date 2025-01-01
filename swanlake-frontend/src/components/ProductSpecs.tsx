@@ -61,50 +61,23 @@
 //         </div>
 //     );
 // }
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Cpu, Battery, Smartphone, HardDrive } from 'lucide-react';
-import axios from 'axios';
 
 interface ProductSpecsProps {
-  reviewID: string; // Tambahkan reviewID sebagai prop
+  specs: {
+    processor: string;
+    processorDesc: string;
+    storage: string;
+    storageDesc: string;
+    display: string;
+    displayDesc: string;
+    battery: string;
+    batteryDesc: string;
+  };
 }
 
-interface Specs {
-  processor: string;
-  ram: string;
-  storage: string;
-  display: string;
-  battery: string;
-}
-
-export default function ProductSpecs({ reviewID }: ProductSpecsProps) {
-  const [specs, setSpecs] = useState<Specs | null>(null);
-
-  useEffect(() => {
-    // Fetch spesifikasi berdasarkan reviewID
-    const fetchSpecs = async () => {
-      try {
-        const result = await axios.get(`http://localhost:8080/get/review/${reviewID}`);
-        setSpecs(result.data);
-      } catch (error) {
-        console.error('Error fetching specs:', error);
-      }
-    };
-
-    if (reviewID) {
-      fetchSpecs();
-    }
-  }, [reviewID]);
-
-  if (!specs) {
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-bold dark:text-white mb-4">Specifications</h3>
-        <p className="text-gray-600 dark:text-gray-300">Loading specifications...</p>
-      </div>
-    );
-  }
-
+export default function ProductSpecs({ specs }: ProductSpecsProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
       <h3 className="text-xl font-bold dark:text-white mb-4">Specifications</h3>
@@ -117,6 +90,7 @@ export default function ProductSpecs({ reviewID }: ProductSpecsProps) {
           <div>
             <h4 className="font-semibold dark:text-white">Processor</h4>
             <p className="text-gray-600 dark:text-gray-300">{specs.processor}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{specs.processorDesc}</p>
           </div>
         </div>
 
@@ -127,6 +101,7 @@ export default function ProductSpecs({ reviewID }: ProductSpecsProps) {
           <div>
             <h4 className="font-semibold dark:text-white">Storage</h4>
             <p className="text-gray-600 dark:text-gray-300">{specs.storage}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{specs.storageDesc}</p>
           </div>
         </div>
 
@@ -137,6 +112,7 @@ export default function ProductSpecs({ reviewID }: ProductSpecsProps) {
           <div>
             <h4 className="font-semibold dark:text-white">Display</h4>
             <p className="text-gray-600 dark:text-gray-300">{specs.display}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{specs.displayDesc}</p>
           </div>
         </div>
 
@@ -147,9 +123,11 @@ export default function ProductSpecs({ reviewID }: ProductSpecsProps) {
           <div>
             <h4 className="font-semibold dark:text-white">Battery</h4>
             <p className="text-gray-600 dark:text-gray-300">{specs.battery}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{specs.batteryDesc}</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
