@@ -1,18 +1,18 @@
 import axios, { AxiosResponse } from "axios";
 
-interface UserData {
-  username: string;
+export interface Profile {
+  accountID: string;
   email: string;
-  password: string;
-  [key: string]: any; // untuk fleksibilitas tambahan
-}
-
-interface Profile {
-  id: string;
-  username: string;
-  email: string;
+  name: string;
   role: string;
   [key: string]: any;
+}
+
+interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  [key: string]: any; // for flexibility
 }
 
 class UserService {
@@ -51,14 +51,12 @@ class UserService {
     }
   }
 
-  static async getAllUsers(token: string): Promise<Profile[]> {
+  static async getAllUsers(token: string): Promise<{ accountList: Profile[] }> {
     try {
-      const response: AxiosResponse<Profile[]> = await axios.get(
-        `${UserService.BASE_URL}/admin/get-all-users`,
-        {
+      const response: AxiosResponse<{ accountList: Profile[] }> =
+        await axios.get(`${UserService.BASE_URL}/admin/get-all-users`, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+        });
       return response.data;
     } catch (err) {
       throw err;

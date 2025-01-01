@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 // Define the shape of the form data
 interface FormData {
-  username: string;
+  name: string;
   email: string;
   password: string;
   role: string;
@@ -15,7 +15,7 @@ function RegistrationPage() {
 
   // Initialize formData state with the type FormData
   const [formData, setFormData] = useState<FormData>({
-    username: "",
+    name: "",
     email: "",
     password: "",
     role: "USER", // Set default role as "USER"
@@ -36,7 +36,7 @@ function RegistrationPage() {
 
       if (response.message === "User Saved Successfully") {
         setFormData({
-          username: "",
+          name: "",
           email: "",
           password: "",
           role: "USER",
@@ -64,14 +64,14 @@ function RegistrationPage() {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-700">
+            <label htmlFor="name" className="block text-gray-700">
               Username
             </label>
             <input
               type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

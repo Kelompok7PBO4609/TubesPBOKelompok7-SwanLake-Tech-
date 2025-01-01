@@ -20,6 +20,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ForbiddenPage from "./pages/ForbiddenPage";
 import UserService from "./service/UserService"; // Import UserService
 import RegistrationPage from "./auth/RegistrationPage";
+import UserManagementPage from "./pages/UserManagementPage";
+import ReviewSmartphonePage from "./pages/ReviewSmartphonePage";
+import ReviewWork from "./pages/ReviewWork";
+import UpdateUserPage from "./pages/UpdateUserPage";
 
 export default function App() {
   // Mengecek apakah user sudah terautentikasi
@@ -107,6 +111,30 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/smartphone/"
+              element={
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
+                  <ReviewSmartphonePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/product-review/:reviewID"
+              element={
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
+                  <ReviewWork />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/update-user/:accountID"
+              element={
+                <ProtectedRoute roles={["USER", "ADMIN"]}>
+                  <UpdateUserPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Halaman khusus admin */}
             <Route
@@ -114,6 +142,16 @@ export default function App() {
               element={
                 <ProtectedRoute roles={["ADMIN"]}>
                   <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Halaman khusus admin */}
+            <Route
+              path="/user-management"
+              element={
+                <ProtectedRoute roles={["ADMIN"]}>
+                  <UserManagementPage />
                 </ProtectedRoute>
               }
             />

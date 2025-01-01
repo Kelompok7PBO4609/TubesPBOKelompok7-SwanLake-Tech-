@@ -33,12 +33,12 @@ public class AccountManagementService {
 
         try {
             // Validate username
-            if (registrationRequest.getUsername() == null || registrationRequest.getUsername().isEmpty()) {
+            if (registrationRequest.getName() == null || registrationRequest.getName().isEmpty()) {
                 resp.setStatusCode(400);
                 resp.setMessage("Username cannot be empty");
                 return resp;
             }
-            if (!Pattern.matches("^[a-zA-Z0-9]{3,}$", registrationRequest.getUsername())) {
+            if (!Pattern.matches("^[a-zA-Z0-9]{3,}$", registrationRequest.getName())) {
                 resp.setStatusCode(400);
                 resp.setMessage("Username must be at least 3 characters and only alphanumeric");
                 return resp;
@@ -78,7 +78,7 @@ public class AccountManagementService {
             }
 
             // Check if username already exists
-            if (accountRepository.findByUsername(registrationRequest.getUsername()).isPresent()) {
+            if (accountRepository.findByName(registrationRequest.getName()).isPresent()) {
                 resp.setStatusCode(400);
                 resp.setMessage("Username already in use");
                 return resp;
@@ -88,7 +88,7 @@ public class AccountManagementService {
             Account account = new Account();
             account.setEmail(registrationRequest.getEmail());
             account.setRole(registrationRequest.getRole());
-            account.setUsername(registrationRequest.getUsername());
+            account.setName(registrationRequest.getName());
             account.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
             Account ourUsersResult = accountRepository.save(account);
@@ -217,8 +217,8 @@ public class AccountManagementService {
                 if (reqRes.getEmail() != null) {
                     existingUser.setEmail(reqRes.getEmail());
                 }
-                if (reqRes.getUsername() != null) {
-                    existingUser.setUsername(reqRes.getUsername());
+                if (reqRes.getName() != null) {
+                    existingUser.setName(reqRes.getName());
                 }
                 if (reqRes.getRole() != null) {
                     existingUser.setRole(reqRes.getRole());

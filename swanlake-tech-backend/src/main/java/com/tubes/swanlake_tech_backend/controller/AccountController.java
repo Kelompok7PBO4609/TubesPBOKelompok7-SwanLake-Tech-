@@ -25,10 +25,10 @@ public class AccountController {
     @PostMapping("/post/user")
     public ResponseEntity<?> newUser(@RequestBody Account newUser) {
         // Validasi username
-        if (newUser.getUsername().isEmpty()) {
+        if (newUser.getName().isEmpty()) {
             return ResponseEntity.badRequest().body("Error: Username cannot be empty!");
         }
-        if (!USERNAME_PATTERN.matcher(newUser.getUsername()).matches()) {
+        if (!USERNAME_PATTERN.matcher(newUser.getName()).matches()) {
             return ResponseEntity.badRequest().body("Error: Username must be at least 3 characters long, contain no spaces, and alphanumeric!");
         }
 
@@ -46,7 +46,7 @@ public class AccountController {
         }
 
         // Validasi username dan email unik
-        if (accountRepository.findByUsername(newUser.getUsername()).isPresent()) {
+        if (accountRepository.findByName(newUser.getName()).isPresent()) {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
         if (accountRepository.findByEmail(newUser.getEmail()).isPresent()) {

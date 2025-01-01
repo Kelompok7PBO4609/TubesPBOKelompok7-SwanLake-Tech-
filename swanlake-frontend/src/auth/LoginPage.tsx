@@ -18,6 +18,7 @@ const LoginPage: React.FC = () => {
         localStorage.setItem("token", userData.token);
         localStorage.setItem("role", userData.role);
         navigate("/homepage");
+        window.location.reload();
       } else if ("message" in userData) {
         setError(userData.message);
       }
