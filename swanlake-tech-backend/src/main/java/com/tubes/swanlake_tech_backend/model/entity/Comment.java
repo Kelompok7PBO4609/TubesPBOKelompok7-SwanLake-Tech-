@@ -17,11 +17,12 @@ public class Comment {
     @Column(nullable = false)
     private String commentText;
 
-    @ManyToOne
-    @JoinColumn(name = "accountID", nullable = false)
-    private Account account;
+    @Column(nullable = false)
+    private Long commentAccountID;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewID", nullable = false)
-    private Review review;
+    @Column(nullable = false)
+    private Long commentReviewID;
+
+    @Column(nullable = false)
+    private String commentUsername;
 }

@@ -33,6 +33,8 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request-> request.requestMatchers("/auth/**", "/public/**").permitAll()
+                        .requestMatchers("/post/comment").permitAll()
+                        .requestMatchers("/get/comment").permitAll()
                         .requestMatchers("/post/review").permitAll()
                         .requestMatchers("/get/review/**").permitAll()
                         .requestMatchers("/delete/review/**").permitAll()

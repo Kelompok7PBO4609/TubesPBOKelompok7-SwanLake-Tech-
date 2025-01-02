@@ -1,128 +1,158 @@
-import React, { useState } from 'react';
-import { User, ThumbsUp, ThumbsDown, Reply } from 'lucide-react';
-import ReactStars from 'react-stars';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import UserService from "../service/UserService";
+import { User } from "lucide-react"; // Import ikon Lucide React
 
 interface Comment {
-    id: number;
-    user: string;
-    avatar: string;
-    rating: number;
-    content: string;
-    likes: number;
-    dislikes: number;
-    date: string;
-    replies?: Comment[];
+  commentID: string;
+  commentText: string;
+  commentAccountID: string;
+  commentReviewID: string;
+  commentUsername: string;
 }
 
-const comments: Comment[] = [
-    {
-        id: 1,
-        user: "Faris Dzulfiqar",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100",
-        rating: 4,
-        content: "The camera improvements are incredible! Night mode photos are especially impressive.",
-        likes: 24,
-        dislikes: 2,
-        date: "2 days ago",
-        replies: [
-            {
-                id: 2,
-                user: "Nadhif Susanto",
-                avatar: "https://cdn.rafled.com/anime-icons/images/jQuSzIWU7vq4BHJL2Cs4pilRVMrHKZa3.jpg",
-                rating: 5,
-                content: "Totally agree! The macro shots are amazing too.",
-                likes: 8,
-                dislikes: 0,
-                date: "1 day ago"
-            }
-        ]
+interface ProfileInfo {
+  accountID?: string;
+  name?: string;
+  [key: string]: any;
+}
+
+const CommentSection: React.FC<{ reviewID: string }> = ({ reviewID }) => {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentText, setCommentText] = useState("");
+  const [profileInfo, setProfileInfo] = useState<ProfileInfo>({});
+
+  useEffect(() => {
+    fetchProfileInfo();
+    fetchComments();
+    console.log("Review ID:", reviewID); // Log reviewID
+  }, [reviewID]);
+
+  const fetchProfileInfo = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await UserService.getYourProfile(token);
+      if (response && response.account) {
+        setProfileInfo(response.account);
+        console.log("Account ID:", response.account.accountID); // Log accountID
+      } else {
+        console.error("Profile data is missing:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching profile information:", error);
     }
-];
+  };
 
-export default function CommentSection() {
-    const [newComment, setNewComment] = useState("");
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get<Comment[]>(
+        "http://localhost:8080/get/comment"
+      );
+      console.log("Full comments data:", response.data);
 
-    const CommentCard = ({ comment, isReply = false }: { comment: Comment; isReply?: boolean }) => (
-        <div className={`${isReply ? 'ml-12' : ''} mb-6`}>
-            <div className="flex gap-4">
-                <img
-                    src={comment.avatar}
-                    alt={comment.user}
-                    className="w-10 h-10 rounded-full"
-                />
-                <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold dark:text-white">{comment.user}</span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{comment.date}</span>
-                    </div>
-                    <ReactStars
-                        count={5}
-                        value={comment.rating}
-                        size={16}
-                        color2="#FDB241"
-                        edit={false}
-                    />
-                    <p className="mt-2 text-gray-600 dark:text-gray-300">{comment.content}</p>
+      // Ensure type compatibility between commentReviewID and reviewID
+      const filteredComments = response.data.filter(
+        (comment) => String(comment.commentReviewID) === String(reviewID)
+      );
+      console.log(
+        "Filtered comments for reviewID:",
+        reviewID,
+        filteredComments
+      );
 
-                    <div className="flex items-center gap-6 mt-3">
-                        <button className="flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400">
-                            <ThumbsUp className="w-4 h-4" />
-                            <span>{comment.likes}</span>
-                        </button>
-                        <button className="flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                            <ThumbsDown className="w-4 h-4" />
-                            <span>{comment.dislikes}</span>
-                        </button>
-                        <button className="flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400">
-                            <Reply className="w-4 h-4" />
-                            <span>Reply</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+      setComments(filteredComments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileInfo.accountID) {
+      console.error("Profile information is missing");
+      return;
+    }
+
+    const newComment = {
+      commentText,
+      commentAccountID: profileInfo.accountID,
+      commentReviewID: reviewID,
+      commentUsername: profileInfo.name || "Anonymous",
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/post/comment",
+        newComment
+      );
+      console.log("Comment posted response:", response.data);
+      setCommentText("");
+      fetchComments(); // Refresh comments after posting
+    } catch (error) {
+      console.error("Error posting comment:", error);
+    }
+  };
+
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-lg font-bold mb-4">Comments</h2>
+
+      {/* Form for Posting Comment */}
+      <form onSubmit={handleSubmit} className="mb-6">
+        <div className="mb-4">
+          <textarea
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Write your comment here..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            required
+          />
         </div>
-    );
+        <input
+          type="hidden"
+          value={profileInfo.accountID || ""}
+          name="commentAccountID"
+        />
+        <input type="hidden" value={reviewID} name="commentReviewID" />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Post Comment
+        </button>
+      </form>
 
-    return (
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold dark:text-white mb-6">Comments (128)</h2>
-
-            <div className="mb-8">
-                <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                        <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-                    </div>
-                    <div className="flex-1">
-                        <ReactStars
-                            count={5}
-                            value={0}
-                            size={24}
-                            color2="#FDB241"
-                        />
-                        <textarea
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="Write your comment..."
-                            className="mt-2 w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors"
-                            rows={3}
-                        />
-                        <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            Post Comment
-                        </button>
-                    </div>
-                </div>
+      {/* Comments Section */}
+      <div>
+        {comments.map((comment) => (
+          <div
+            key={comment.commentID}
+            className="flex items-start p-4 mb-3 bg-white rounded-lg shadow"
+          >
+            {/* User Icon */}
+            <div className="mr-4">
+              <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
+                <User className="text-gray-500 w-6 h-6" />{" "}
+                {/* Ikon Lucide React */}
+              </div>
             </div>
-
-            <div className="space-y-6">
-                {comments.map(comment => (
-                    <div key={comment.id}>
-                        <CommentCard comment={comment} />
-                        {comment.replies?.map(reply => (
-                            <CommentCard key={reply.id} comment={reply} isReply />
-                        ))}
-                    </div>
-                ))}
+            {/* Comment Content */}
+            <div>
+              <p className="text-gray-800 font-bold">
+                {comment.commentUsername}
+              </p>
+              <p className="text-gray-600">{comment.commentText}</p>
             </div>
-        </div>
-    );
-}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CommentSection;

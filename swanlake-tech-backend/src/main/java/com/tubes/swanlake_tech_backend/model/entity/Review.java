@@ -86,6 +86,6 @@ public class Review {
     @Column
     private LocalDate date;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    @Column
+    private Long reviewAccountID;
 }
