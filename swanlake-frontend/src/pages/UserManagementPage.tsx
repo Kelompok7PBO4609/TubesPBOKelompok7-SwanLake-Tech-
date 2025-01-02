@@ -55,7 +55,7 @@ function UserManagementPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold text-center mb-6">
+      <h2 className="text-2xl font-bold text-center mb-6 dark:text-white">
         Users Management Page
       </h2>
 
@@ -76,7 +76,7 @@ function UserManagementPage() {
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading users...</p>
+        <p className="text-center text-gray-500 dark:text-white">Loading users...</p>
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : users.length > 0 ? (

@@ -82,7 +82,7 @@ export default function UserList() {
       </div>
 
       {/* Table */}
-      <table className="min-w-full border-collapse border border-gray-300">
+      <table className="min-w-full border-collapse border border-gray-300 dark:text-white">
         <thead>
           <tr>
             <th className="border border-gray-300 px-4 py-2">Id</th>

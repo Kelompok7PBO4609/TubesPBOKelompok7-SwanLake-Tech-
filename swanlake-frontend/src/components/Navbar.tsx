@@ -26,6 +26,7 @@ export default function Navbar() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // State untuk pencarian
   const [searchResults, setSearchResults] = useState<Review[]>([]); // State untuk hasil pencarian
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State untuk dropdown profile
   const navigate = useNavigate();
 
   const isAuthenticated = UserService.isAuthenticated();
@@ -64,6 +65,10 @@ export default function Navbar() {
     }
   };
 
+  // Fungsi untuk toggle dropdown profile
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
       <>
@@ -74,8 +79,8 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link to="/"> {/* Tambahkan Link yang mengarah ke homepage */}
                   <span className="text-2xl font-bold text-gray-900 dark:text-white cursor-pointer">
-                  SwanLake Tech
-                </span>
+                    SwanLake Tech
+                  </span>
                 </Link>
               </div>
 
@@ -125,37 +130,43 @@ export default function Navbar() {
                     </button>
                 )}
 
-                {/* Admin Dashboard Button */}
-                {isAuthenticated && isAdmin && (
-                    <button
-                        onClick={() => navigate("/admin-dashboard")}
-                        className="p-2 text-blue-500 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                        aria-label="Admin Dashboard"
-                    >
-                      Admin Dashboard
-                    </button>
-                )}
-
-                {/* Auth Modal Button */}
+                {/* Profile Dropdown Menu */}
                 {isAuthenticated && (
-                    <button
-                        onClick={() => setIsAuthOpen(true)}
-                        className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                        aria-label="Profile"
-                    >
-                      <UserCircle className="w-5 h-5"/>
-                    </button>
-                )}
+                    <div className="relative">
+                      <button
+                          onClick={toggleDropdown}
+                          className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                          aria-label="Profile"
+                      >
+                        <UserCircle className="w-5 h-5"/>
+                      </button>
 
-                {/* Logout Button */}
-                {isAuthenticated && (
-                    <button
-                        onClick={handleLogout}
-                        className="p-2 text-red-500 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                        aria-label="Logout"
-                    >
-                      <LogOut className="w-5 h-5"/>
-                    </button>
+                      {/* Dropdown Menu */}
+                      {isDropdownOpen && (
+                          <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black rounded-lg shadow-lg z-10">
+                            <ul className="py-1">
+                              {isAdmin && (  // Hanya tampilkan Admin Dashboard untuk admin
+                                  <li>
+                                    <button
+                                        onClick={() => navigate("/admin-dashboard")}
+                                        className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                                    >
+                                      Admin Dashboard
+                                    </button>
+                                  </li>
+                              )}
+                              <li>
+                                <button
+                                    onClick={handleLogout}
+                                    className="block px-4 py-2 text-red-500 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                                >
+                                  Logout
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                      )}
+                    </div>
                 )}
 
                 {/* Side Menu Button */}
