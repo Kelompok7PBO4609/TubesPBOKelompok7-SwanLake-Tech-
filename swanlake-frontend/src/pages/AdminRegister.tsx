@@ -2,7 +2,6 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import UserService from "../service/UserService";
 import { useNavigate } from "react-router-dom";
 
-// Define the shape of the form data
 interface FormData {
   name: string;
   email: string;
@@ -13,25 +12,21 @@ interface FormData {
 function RegistrationPage() {
   const navigate = useNavigate();
 
-  // Initialize formData state with the type FormData
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     password: "",
-    role: "ADMIN", // Set default role as "ADMIN"
+    role: "ADMIN",
   });
 
-  // Handle input changes with proper typing for event
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission with proper typing for event
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Call the register method from UserService
       const response = await UserService.register(formData);
 
       if (response.message === "User Saved Successfully") {
@@ -44,7 +39,7 @@ function RegistrationPage() {
         alert("User registered successfully");
         navigate("/user-management");
       } else {
-        // Show backend validation message
+
         alert(response.message);
       }
     } catch (error: any) {

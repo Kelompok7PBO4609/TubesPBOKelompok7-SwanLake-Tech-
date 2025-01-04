@@ -4,7 +4,7 @@ import { Heart, Scale, Share2, ArrowLeft, MessageSquare } from "lucide-react";
 import ReactStars from "react-stars";
 import CommentSection from "../components/CommentSection";
 import ProductSpecs from "../components/ProductSpecs";
-import CompareModal from "../components/CompareModal"; // Import the CompareModal
+import CompareModal from "../components/CompareModal";
 import axios from "axios";
 
 interface Review {
@@ -31,8 +31,8 @@ export default function ReviewPage() {
   const { reviewID } = useParams<{ reviewID: string }>();
   const [review, setReview] = useState<Review | null>(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false); // State for CompareModal
-  const [comparableProducts, setComparableProducts] = useState<Review[]>([]); // State for comparable products
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [comparableProducts, setComparableProducts] = useState<Review[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,8 +68,8 @@ export default function ReviewPage() {
 
   const handleCompare = () => {
     if (review) {
-      fetchComparableProducts(review.productType); // Fetch comparable products
-      setIsCompareModalOpen(true); // Open the compare modal
+      fetchComparableProducts(review.productType); 
+      setIsCompareModalOpen(true);
     }
   };
 

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../service/UserService";
 import { Profile } from "../service/UserService";
-import { Edit, Trash2 } from "lucide-react"; // Import icons from Lucide React
+import { Edit, Trash2 } from "lucide-react";
 
 function UserManagementPage() {
   const [users, setUsers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // Use navigate for redirection
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers();

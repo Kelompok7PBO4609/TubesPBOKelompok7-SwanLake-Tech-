@@ -51,7 +51,7 @@ export default function UserList() {
             {/* Image */}
             <div className="relative">
               <img
-                src={`/images/${review.imageName}`} // Gambar diambil dari folder public
+                src={`/images/${review.imageName}`}
                 alt={review.productName}
                 className="w-full h-48 object-cover"
               />

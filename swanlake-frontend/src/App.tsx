@@ -18,7 +18,7 @@ import LoginPage from "./auth/LoginPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import ForbiddenPage from "./pages/ForbiddenPage";
-import UserService from "./service/UserService"; // Import UserService
+import UserService from "./service/UserService";
 import RegistrationPage from "./auth/RegistrationPage";
 import UserManagementPage from "./pages/UserManagementPage";
 import ReviewManagementPage from "./pages/ReviewManagementPage";

@@ -8,7 +8,7 @@ interface Account {
   username: string;
   password: string;
   email: string;
-  imagePath?: string; // Optional field for the image path
+  imagePath?: string;
 }
 
 export default function UserList() {
@@ -45,7 +45,7 @@ export default function UserList() {
           >
             {/* Image Section */}
             <img
-              src={account.imagePath || "default-avatar.png"} // Use default image if no imagePath
+              src={account.imagePath || "default-avatar.png"}
               alt={account.username}
               className="w-full h-48 object-cover"
             />

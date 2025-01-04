@@ -64,7 +64,7 @@ const UserUpdatePage: React.FC = () => {
         .then((response) => {
           const { message } = response.data;
           alert(message || "Account updated successfully!");
-          navigate("/user-management"); // Redirect to accounts list page
+          navigate("/user-management"); 
         })
         .catch(() => {
           setError("Failed to update account.");
